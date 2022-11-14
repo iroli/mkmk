@@ -86,6 +86,7 @@ public class Terms_Management {
                     """, concept_code);
             ans = in.next();
             in.nextLine();
+            List<String> props;
             switch (ans) {
                 case "`":
                     System.out.printf("\nTerm Name:\n%s\n", DOM_Management.GetProp("term", concept));
@@ -96,12 +97,22 @@ public class Terms_Management {
                     DOM_Management.SetProp("term", ans, concept);
                     break;
                 case "2":
+                    props = DOM_Management.GetPropList("related", "term", concept);
+                    System.out.print("\nList of related terms without names:\n");
+                    for (int i = 0; i < props.size(); ++i) {
+                        System.out.printf("%d -- %s\n", i + 1, props.get(i));
+                    }
                     break;
                 case "3":
                     break;
                 case "4":
                     break;
                 case "5":
+                    props = DOM_Management.GetPropList("related", "source", concept);
+                    System.out.print("\nList of related publications without names:\n");
+                    for (int i = 0; i < props.size(); ++i) {
+                        System.out.printf("%d -- %s\n", i + 1, props.get(i));
+                    }
                     break;
                 case "6":
                     break;
@@ -122,7 +133,7 @@ public class Terms_Management {
 
     public static void Show_Empty(Tes_Parser.Container container) {
         List<String> nodes = DOM_Management.ScanEmpty(container.document);
-        System.out.print("\nList of terms witout names:");
+        System.out.print("\nList of terms without names:");
         for (int i = 0; i < nodes.size(); ++i) {
             if (i % 8 == 0) {
                 System.out.println();

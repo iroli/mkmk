@@ -195,4 +195,36 @@ public class DOM_Management {
             }
         }
     }
+
+
+    public static List<String> GetPropList(String propname, Node node) {
+        List<String> out_nodes = new ArrayList<String>();
+        NodeList props = node.getChildNodes();
+        for (int i = 0; i < props.getLength(); ++i) {
+            Node prop = props.item(i);
+            if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals(propname)) {
+                out_nodes.add(prop.getTextContent());
+            }
+        }
+        return out_nodes;
+    }
+    public static List<String> GetPropList(String propname, String proptype, Node node) {
+        List<String> out_nodes = new ArrayList<String>();
+        NodeList props = node.getChildNodes();
+        for (int i = 0; i < props.getLength(); ++i) {
+            Node prop = props.item(i);
+            if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals(propname)) {
+                if (prop.hasAttributes()) {
+                    NamedNodeMap attrs = prop.getAttributes();
+                    for (int j = 0; j < attrs.getLength(); ++j) {
+                        Node attr = attrs.item(j);
+                        if (attr.getNodeName().equals("type") && attr.getTextContent().equals(proptype)) {
+                            out_nodes.add(prop.getTextContent());
+                        }
+                    }
+                }
+            }
+        }
+        return out_nodes;
+    }
 }

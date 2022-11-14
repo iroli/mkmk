@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <collection>
-        
-    
     <concept>
-                
         <code>A1</code>
-                
-        <term>testname</term>
-            
+        <term>testname_A1</term>
+        <related type="term">RT1</related>
+        <related type="term">RT2</related>
+        <related type="source">RP1</related>
+        <related type="source">RP2</related>
     </concept>
-    
+    <concept>
+        <code>RT1</code>
+        <term/>
+        <related type="term">A1</related>
+    </concept>
+    <concept>
+        <code>RT2</code>
+        <term/>
+        <related type="term">A1</related>
+    </concept>
 </collection>
