@@ -13,7 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class File_Management {
+public class FILE {
     public static void FileSelect(Tes_Parser.Container container) {
         String filepath;
         Scanner in = new Scanner(System.in);
@@ -69,8 +69,7 @@ public class File_Management {
         String text =
                 """
                         <?xml version="1.0" encoding="UTF-8"?>
-                        <collection>
-                        </collection>""";   // инициализирующая строка xml
+                        <collection/>""";   // инициализирующая строка xml
         try(FileOutputStream fos = new FileOutputStream(container.filepath))
         {
             // перевод строки в байты

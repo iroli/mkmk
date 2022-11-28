@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class DOM_Management {
+public class DOM {
     public static int GetDOMType(Document document) {
         // Типы возвращааемых значений
         // -1 -- Содержит неизвестные данные
@@ -34,42 +34,42 @@ public class DOM_Management {
     }
 
 
-    public static Node GetNode(Tes_Parser.Container container) {
+    public static Node FindNode(Tes_Parser.Container container) {
         Scanner in = new Scanner(System.in);
         String ans;
+        String type = "";
+        String Type = "";
+        switch (container.doc_type) {
+            case 1 -> {
+                type = "term";
+                Type = "Term";
+            }
+            case 2 -> {
+                type = "publication";
+                Type = "Publication";
+            }
+        }
 
-        System.out.print("\nInsert code of the term:\n");
-        ans = in.nextLine();
-        String code = ans;
+        System.out.printf("\nInsert code of the %s:\n", type);
+        String code = in.nextLine();
 
-        Node root = container.document.getDocumentElement();
         while (true) {
-            NodeList nodes = root.getChildNodes();
-            for (int i = 0; i < nodes.getLength(); ++i) {
-                Node node = nodes.item(i);
-                if (node.getNodeType() != Node.TEXT_NODE) {
-                    NodeList props = node.getChildNodes();
-                    for (int j = 0; j < props.getLength(); ++j) {
-                        Node prop = props.item(j);
-                        if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals("code")) {
-                            if (prop.getTextContent().equals(code)) {
-                                return node;
-                            }
-                        }
-                    }
-                }
+            Node node = GetNode(code, container);
+            if (node != null) {
+                return node;
             }
 
             //Если нода не найдена
             label:
             while (true) {
-                System.out.print("\nTerm does not exist. Create one? (y|n)\n");
+                System.out.printf("\n%s does not exist. Create one? (y|n)\n", Type);
                 ans = in.next();
                 in.nextLine();
                 switch (ans) {
                     case "y":
                     case "Y":
                         CreateNode(code, container);
+                        System.out.printf("\nCreated %s with code: %s\n", type, code);
                         break label;
                     case "n":
                     case "N":
@@ -80,6 +80,24 @@ public class DOM_Management {
                 }
             }
         }
+    }
+    public static Node GetNode(String code, Tes_Parser.Container container){
+        NodeList nodes = container.document.getDocumentElement().getChildNodes();
+        for (int i = 0; i < nodes.getLength(); ++i) {
+            Node node = nodes.item(i);
+            if (node.getNodeType() != Node.TEXT_NODE) {
+                NodeList props = node.getChildNodes();
+                for (int j = 0; j < props.getLength(); ++j) {
+                    Node prop = props.item(j);
+                    if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals("code")) {
+                        if (prop.getTextContent().equals(code)) {
+                            return node;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
 
@@ -103,14 +121,30 @@ public class DOM_Management {
             node.appendChild(node_pages);
             node.appendChild(node_link);
         }
+        node.appendChild(container.document.createElement("raw"));
         container.document.getDocumentElement().appendChild(node);
-
-        System.out.printf("\nCreated node with <code>: %s\n", code);
     }
 
 
+    public static void Show_Empty(Tes_Parser.Container container) {
+        List<String> nodes = DOM.ScanEmpty(container.document);
+        switch (container.doc_type) {
+            case 1 -> System.out.print("\nList of terms without names:");
+            case 2 -> System.out.print("\nList of publications without names:");
+        }
+        for (int i = 0; i < nodes.size(); ++i) {
+            if (i % 8 == 0) {
+                System.out.println();
+            }
+            System.out.printf("%s", nodes.get(i));
+            if (i + 1 < nodes.size()) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println();
+    }
     public static List<String> ScanEmpty(Document document) {
-        List<String> out_nodes = new ArrayList<String>();
+        List<String> out_nodes = new ArrayList<>();
         NodeList nodes = document.getDocumentElement().getChildNodes();
 
         for (int i = 0; i < nodes.getLength(); ++i) {
@@ -138,17 +172,65 @@ public class DOM_Management {
     }
 
 
-    public static String GetProp(String propname, Node node) {
+    public static void CreateProp(String propname, String value, Node node, Tes_Parser.Container container) {
+        Element prop = container.document.createElement(propname);
+        prop.setTextContent(value);
+        node.appendChild(prop);
+    }
+    public static void CreateProp(String propname, String value, String proptype, Node node,
+                                  Tes_Parser.Container container) {
+        Element prop = container.document.createElement(propname);
+        prop.setTextContent(value);
+        prop.setAttribute("type", proptype);
+        node.appendChild(prop);
+    }
+
+
+    public static void RemoveProp(String propname, String value, Node node) {
+        NodeList props = node.getChildNodes();
+        for (int i = 0; i < props.getLength(); ++i) {
+            Node prop = props.item(i);
+            if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals(propname)
+                    && prop.getTextContent().equals(value)) {
+                node.removeChild(prop);
+                return;
+            }
+        }
+        System.out.print("Prop is not found.\n");
+    }
+    public static void RemoveProp(String propname, String value, String proptype, Node node) {
+        NodeList props = node.getChildNodes();
+        for (int i = 0; i < props.getLength(); ++i) {
+            Node prop = props.item(i);
+            if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals(propname)
+                    && prop.getTextContent().equals(value)) {
+                if (prop.hasAttributes()) {
+                    NamedNodeMap attrs = prop.getAttributes();
+                    for (int j = 0; j < attrs.getLength(); ++j) {
+                        Node attr = attrs.item(j);
+                        if (attr.getNodeName().equals("type") && attr.getTextContent().equals(proptype)) {
+                            node.removeChild(prop);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        System.out.print("Prop is not found.\n");
+    }
+
+
+    public static Node GetProp(String propname, Node node) {
         NodeList props = node.getChildNodes();
         for (int i = 0; i < props.getLength(); ++i) {
             Node prop = props.item(i);
             if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals(propname)) {
-                return prop.getTextContent();
+                return prop;
             }
         }
-        return "";
+        return null;
     }
-    public static String GetProp(String propname, String proptype, Node node) {
+    /*public static Node GetProp(String propname, String proptype, Node node) {
         NodeList props = node.getChildNodes();
         for (int i = 0; i < props.getLength(); ++i) {
             Node prop = props.item(i);
@@ -158,47 +240,48 @@ public class DOM_Management {
                     for (int j = 0; j < attrs.getLength(); ++j) {
                         Node attr = attrs.item(j);
                         if (attr.getNodeName().equals("type") && attr.getTextContent().equals(proptype)) {
-                            return prop.getTextContent();
+                            return prop;
                         }
                     }
                 }
             }
         }
-        return "";
-    }
-
-
-    public static void SetProp(String propname, String value, Node node) {
+        return null;
+    }*/
+    public static Node GetPropByValue(String propname, String value, Node node) {
         NodeList props = node.getChildNodes();
         for (int i = 0; i < props.getLength(); ++i) {
             Node prop = props.item(i);
-            if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals(propname)) {
-                prop.setTextContent(value);
-                System.out.println("Property set successfully.");
+            if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals(propname)
+                    && prop.getTextContent().equals(value)) {
+                return prop;
             }
         }
+        return null;
     }
-    public static void SetProp(String propname, String proptype, String value, Node node) {
+    public static Node GetPropByValue(String propname, String value, String proptype, Node node) {
         NodeList props = node.getChildNodes();
         for (int i = 0; i < props.getLength(); ++i) {
             Node prop = props.item(i);
-            if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals(propname)) {
+            if (prop.getNodeType() != Node.TEXT_NODE && prop.getNodeName().equals(propname)
+                    && prop.getTextContent().equals(value)) {
                 if (prop.hasAttributes()) {
                     NamedNodeMap attrs = prop.getAttributes();
                     for (int j = 0; j < attrs.getLength(); ++j) {
                         Node attr = attrs.item(j);
                         if (attr.getNodeName().equals("type") && attr.getTextContent().equals(proptype)) {
-                            prop.setTextContent(value);
+                            return prop;
                         }
                     }
                 }
             }
         }
+        return null;
     }
 
 
     public static List<String> GetPropList(String propname, Node node) {
-        List<String> out_nodes = new ArrayList<String>();
+        List<String> out_nodes = new ArrayList<>();
         NodeList props = node.getChildNodes();
         for (int i = 0; i < props.getLength(); ++i) {
             Node prop = props.item(i);
@@ -209,7 +292,7 @@ public class DOM_Management {
         return out_nodes;
     }
     public static List<String> GetPropList(String propname, String proptype, Node node) {
-        List<String> out_nodes = new ArrayList<String>();
+        List<String> out_nodes = new ArrayList<>();
         NodeList props = node.getChildNodes();
         for (int i = 0; i < props.getLength(); ++i) {
             Node prop = props.item(i);

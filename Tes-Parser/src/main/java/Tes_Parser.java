@@ -39,8 +39,8 @@ public class Tes_Parser {
         //Конец инициализирующей последовательности
         //Передача управления В соответствующую функцию менеджмента
         switch (container.doc_type) {
-            case 1 -> Terms_Management.Terms_main(container);
-            case 2 -> Publications_Management.Publications_main(container);
+            case 1 -> TERMS.Terms_main(container);
+            case 2 -> PUBLICATIONS.Publications_main(container);
         }
     }
 
@@ -52,9 +52,9 @@ public class Tes_Parser {
 
         do {
             //Считывается путь до файла
-            File_Management.FileSelect(container);
+            FILE.FileSelect(container);
             //Создаётся (при надобности) и загружается файл
-            File_Management.FileLoad(container);
+            FILE.FileLoad(container);
             if (container.document == null) {
                 label:
                 while (true) {
@@ -86,7 +86,7 @@ public class Tes_Parser {
     public static int InitSequence2(Container container) {          //Определяем тип данных: термины или литература
         Scanner in = new Scanner(System.in);
 
-        int doc_type = DOM_Management.GetDOMType(container.document);
+        int doc_type = DOM.GetDOMType(container.document);
         if (doc_type > 0) {
             //По содержимому файла удалось определить тип
             switch (doc_type) {
