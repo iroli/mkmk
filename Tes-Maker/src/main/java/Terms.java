@@ -3,8 +3,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class TERMS {
-    public static void Terms_main(Tes_Parser.Container container) {
+public class Terms {
+    public static void Terms_main(Tes_Editor.Container container) {
         Scanner in = new Scanner(System.in);
         String ans;
 
@@ -25,7 +25,7 @@ public class TERMS {
             switch (ans) {
                 case "f", "F" -> Term_menu(container);
                 case "e", "E" -> DOM.Show_Empty(container);
-                case "w", "W" -> FILE.FileSave(container);
+                case "w", "W" -> File.FileSave(container);
                 case "q", "Q" -> {
                     label2:
                     while (true) {
@@ -47,7 +47,7 @@ public class TERMS {
                     return;
                 }
                 case "wq", "wQ", "Wq", "WQ" -> {
-                    FILE.FileSave(container);
+                    File.FileSave(container);
                     return;
                 }
                 default -> System.out.println("\nIncorrect input. Try again.");
@@ -57,7 +57,7 @@ public class TERMS {
 
 
 
-    public static void Term_menu(Tes_Parser.Container container) {
+    public static void Term_menu(Tes_Editor.Container container) {
         Scanner in = new Scanner(System.in);
         String ans;
 

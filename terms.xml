@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection>
+    <concept>
+        <code>код</code>
+        <term>название</term>
+        <related type="term">связанный термин 1</related>
+        <related type="term">связанный термин 2</related>
+        <related type="source">связанный источник 1</related>
+        <related type="source">связанный источник 2</related>
+    </concept>
+    <concept>
+        <code>код</code>
+        <term>название</term>
+        <related type="term">связанный термин 1</related>
+        <related type="term">связанный термин 2</related>
+        <related type="source">связанный источник 1</related>
+        <related type="source">связанный источник 2</related>
+    </concept>
+</collection>

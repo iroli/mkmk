@@ -34,7 +34,7 @@ public class DOM {
     }
 
 
-    public static Node FindNode(Tes_Parser.Container container) {
+    public static Node FindNode(Tes_Editor.Container container) {
         Scanner in = new Scanner(System.in);
         String ans;
         String type = "";
@@ -81,7 +81,7 @@ public class DOM {
             }
         }
     }
-    public static Node GetNode(String code, Tes_Parser.Container container){
+    public static Node GetNode(String code, Tes_Editor.Container container){
         NodeList nodes = container.document.getDocumentElement().getChildNodes();
         for (int i = 0; i < nodes.getLength(); ++i) {
             Node node = nodes.item(i);
@@ -101,7 +101,7 @@ public class DOM {
     }
 
 
-    public static void CreateNode(String code, Tes_Parser.Container container) {
+    public static void CreateNode(String code, Tes_Editor.Container container) {
         Element node = container.document.createElement("concept");
         Element node_code = container.document.createElement("code");
         node_code.setTextContent(code);
@@ -126,7 +126,7 @@ public class DOM {
     }
 
 
-    public static void Show_Empty(Tes_Parser.Container container) {
+    public static void Show_Empty(Tes_Editor.Container container) {
         List<String> nodes = DOM.ScanEmpty(container.document);
         switch (container.doc_type) {
             case 1 -> System.out.print("\nList of terms without names:");
@@ -172,13 +172,13 @@ public class DOM {
     }
 
 
-    public static void CreateProp(String propname, String value, Node node, Tes_Parser.Container container) {
+    public static void CreateProp(String propname, String value, Node node, Tes_Editor.Container container) {
         Element prop = container.document.createElement(propname);
         prop.setTextContent(value);
         node.appendChild(prop);
     }
     public static void CreateProp(String propname, String value, String proptype, Node node,
-                                  Tes_Parser.Container container) {
+                                  Tes_Editor.Container container) {
         Element prop = container.document.createElement(propname);
         prop.setTextContent(value);
         prop.setAttribute("type", proptype);

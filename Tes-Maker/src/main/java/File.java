@@ -13,8 +13,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class FILE {
-    public static void FileSelect(Tes_Parser.Container container) {
+public class File {
+    public static void FileSelect(Tes_Editor.Container container) {
         String filepath;
         Scanner in = new Scanner(System.in);
         System.out.print("\nInsert target xml path:\n");
@@ -24,7 +24,7 @@ public class FILE {
     }
 
 
-    public static void FileLoad(Tes_Parser.Container container) {
+    public static void FileLoad(Tes_Editor.Container container) {
         Scanner in = new Scanner(System.in);
 
         try(FileInputStream fis = new FileInputStream(container.filepath)) {
@@ -64,7 +64,7 @@ public class FILE {
     }
 
 
-    public static void FileCreate(Tes_Parser.Container container) {
+    public static void FileCreate(Tes_Editor.Container container) {
         //
         String text =
                 """
@@ -85,7 +85,7 @@ public class FILE {
     }
 
 
-    public static void FileSave(Tes_Parser.Container container) {
+    public static void FileSave(Tes_Editor.Container container) {
         try {
             Transformer tr = TransformerFactory.newInstance().newTransformer();
             // pretty print XML

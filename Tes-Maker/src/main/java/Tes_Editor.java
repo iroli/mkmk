@@ -5,12 +5,12 @@ import org.w3c.dom.Document;
 /**
  * Main class that contatin initializing sequence and Container class for shared data use.
  * @author Ivan Strebkov
- * @see Tes_Parser.Container Shared use data
- * @see Tes_Parser#main(String[]) Start point
- * @see Tes_Parser#InitSequence1(Container) Initializing sequence 1
- * @see Tes_Parser#InitSequence2(Container) Initializing sequence 2
+ * @see Tes_Editor.Container Shared use data
+ * @see Tes_Editor#main(String[]) Start point
+ * @see Tes_Editor#InitSequence1(Container) Initializing sequence 1
+ * @see Tes_Editor#InitSequence2(Container) Initializing sequence 2
  * */
-public class Tes_Parser {
+public class Tes_Editor {
     /**
      * A Container class which is used to share data
      * @author Ivan Strebkov
@@ -26,11 +26,11 @@ public class Tes_Parser {
      * Start point of the program. Starts 2 initializing sequencies and gives the control to the one of two file menus.
      * @author Ivan Strebkov
      * @param args - Parameters from user
-     * @see Tes_Parser#InitSequence1(Container) Initializing sequence 1
-     * @see Tes_Parser#InitSequence2(Container) Initializing sequence 2
-     * @see TERMS#Terms_main(Container) Main terms menu
-     * @see PUBLICATIONS#Publications_main(Container) Main publications menu
-     * @see Tes_Parser.Container Shared use data
+     * @see Tes_Editor#InitSequence1(Container) Initializing sequence 1
+     * @see Tes_Editor#InitSequence2(Container) Initializing sequence 2
+     * @see Terms#Terms_main(Container) Main terms menu
+     * @see Publications#Publications_main(Container) Main publications menu
+     * @see Tes_Editor.Container Shared use data
      */
     public static void main(String[] args) {
         int ret;
@@ -59,8 +59,8 @@ public class Tes_Parser {
         // End of initializing.
         // Giving the control to corresponding management class.
         switch (container.doc_type) {
-            case 1 -> TERMS.Terms_main(container);
-            case 2 -> PUBLICATIONS.Publications_main(container);
+            case 1 -> Terms.Terms_main(container);
+            case 2 -> Publications.Publications_main(container);
         }
     }
 
@@ -72,9 +72,9 @@ public class Tes_Parser {
      * @return Returns the result of file loading:
      * 0 - file loaded;
      * 1 - file not loaded and exit must be executed.
-     * @see Tes_Parser.Container Shared use data
-     * @see FILE#FileSelect(Container) File path and name inserter
-     * @see FILE#FileLoad(Container) File loader
+     * @see Tes_Editor.Container Shared use data
+     * @see File#FileSelect(Container) File path and name inserter
+     * @see File#FileLoad(Container) File loader
      */
     public static int InitSequence1(Container container) {          //Получение и считывание файла
         Scanner in = new Scanner(System.in);
@@ -82,9 +82,9 @@ public class Tes_Parser {
 
         do {
             // Reading file path.
-            FILE.FileSelect(container);
+            File.FileSelect(container);
             // Creating (if needed) and loading the file.
-            FILE.FileLoad(container);
+            File.FileLoad(container);
             if (container.document == null) {           // document remains null if no file loaded.
                 label:
                 while (true) {
@@ -120,7 +120,7 @@ public class Tes_Parser {
      * -1 - file type not determined and file must be changed;
      * 0 - file type determined;
      * 1 - file type not determined and exit must be executed.
-     * @see Tes_Parser.Container Shared use data
+     * @see Tes_Editor.Container Shared use data
      * @see DOM#GetDOMType(Document) Xml tree type recognition
      */
     public static int InitSequence2(Container container) {

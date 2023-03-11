@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection>
+    <publication>
+        <code>код</code>
+        <title>название</title>
+        <author>автор 1</author>
+        <author>автор 2</author>
+        <yaer>XXXX</yaer>
+        <pages>XX - XX</pages>
+        <link>ссылка</link>
+    </publication>
+    <publication>
+        <code>код</code>
+        <title>название</title>
+        <author>автор 1</author>
+        <author>автор 2</author>
+        <yaer>XXXX</yaer>
+        <pages>XX - XX</pages>
+        <link>ссылка</link>
+    </publication>
+</collection>
